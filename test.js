@@ -18,7 +18,7 @@ describe('partch', () => {
     )
 
     let lowPing = p(
-      ping('pinger', { osc: 250, vol: 0.9 }),
+      ping('pinger', { osc: 250, vol: 0.1 }),
       p.biquad(200)
     )
 

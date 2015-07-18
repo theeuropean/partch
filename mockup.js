@@ -1,23 +1,19 @@
 let tripleSynth = p(
+
   p.in,
   p.poly('sources', { channels: 3 },
     p.osc(),
     p.gain()
   ),
-  p.biquad('filter'),
+  '>.detune',
+  p.biquad('filter', { detune: '~filterLFO' }),
   p.gain('vol'),
   p.out,
 
   p.osc('lfo', { frequency: 2 }),
   [
-    p(
-      p.gain('filterLFO'),
-      p.to('filter.detune')
-    ),
-    p(
-      p.gain('volLFO'),
-      p.to('vol.gain')
-    )
+    p.gain('filterLFO'),
+    p.gain('volLFO')
   ]
 )
 
@@ -39,7 +35,10 @@ instance.mod()
 0.1
 
 in, out
-from, to - can take node name or actual WAA node
+conn - can take node name or actual WAA node
+inline audio param modulation
+- taking a vnode
+- taking a ~name
 nodes map
 docs
 tests

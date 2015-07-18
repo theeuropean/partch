@@ -23,7 +23,7 @@ function wrap(planner, renderer) {
     } = helpers.parseArgs(args)
 
     // Attach attributes to fork function
-    _.merge(fork, { defaultId, id, render })
+    _.merge(fork, { defaultId, id, render, instruction: 'vnode' })
 
     function fork(...forkArgs) {
       const {

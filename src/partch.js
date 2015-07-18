@@ -2,6 +2,7 @@ const _ = require('lodash')
 const plan = require('./plan')
 const helpers = require('./helpers')
 const renderers = require('./renderers')
+const routingMethods = require('./routing_methods')
 
 require('./install_native_nodes')
 
@@ -19,6 +20,7 @@ function partch(audioContext) {
   _.merge(
     planner,
     renderers.vnodeFactories(planner),
+    routingMethods,
     {
       audioContext,
       acdest,

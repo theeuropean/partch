@@ -4,10 +4,12 @@ function parseArgs(args) {
   const pa = {}
   pa.strings = args.filter(_.isString)
   pa.numbers = args.filter(_.isNumber)
-  pa.options = _.merge({}, ...args.filter(_.isObject))
+  pa.objects = args.filter(_.isPlainObject)
+  pa.options = _.merge({}, ...pa.objects)
   pa.functions = args.filter(_.isFunction)
   pa.firstString = (pa.strings.length || undefined) && pa.strings[0]
   pa.firstNumber = (pa.numbers.length || undefined) && pa.numbers[0]
+  pa.instructions = args.filter(arg => arg && arg.instruction)
   return pa
 }
 
