@@ -1,27 +1,32 @@
 const sinon = require("sinon")
 
 function buggedAudioContext() {
-
   const ac = new window.AudioContext()
-  ac.nodes = []
+  const sandbox = sinon.sandbox.create()
+  ac.init = init
   
-  wrapNativeNodeFn('Gain')
-  wrapNativeNodeFn('Delay')
-  wrapNativeNodeFn('BiquadFilter')
-  wrapNativeNodeFn('Oscillator')
+  function init() {
+    ac.nodes = []
+    sandbox.restore()
 
-  function wrapNativeNodeFn(name) {
-    const createFnName = `create${ name }`
-    const createFn = ac[createFnName]
+    wrapNativeNodeFn('Gain')
+    wrapNativeNodeFn('Delay')
+    wrapNativeNodeFn('BiquadFilter')
+    wrapNativeNodeFn('Oscillator')
 
-    sinon.stub(ac, createFnName, (...args) => {
-      var newNode = createFn.apply(ac, args)
-      if(newNode.connect) sinon.spy(newNode, 'connect')
-      if(newNode.start) sinon.spy(newNode, 'start')
-      if(newNode.stop) sinon.spy(newNode, 'stop')
-      ac.nodes.push(newNode)
-      return newNode
-    })
+    function wrapNativeNodeFn(name) {
+      const createFnName = `create${ name }`
+      const createFn = ac[createFnName]
+
+      sandbox.stub(ac, createFnName, (...args) => {
+        var newNode = createFn.apply(ac, args)
+        if(newNode.connect) sandbox.spy(newNode, 'connect')
+        if(newNode.start) sandbox.spy(newNode, 'start')
+        if(newNode.stop) sandbox.spy(newNode, 'stop')
+        ac.nodes.push(newNode)
+        return newNode
+      })
+    }    
   }
 
   return ac

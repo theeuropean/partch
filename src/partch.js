@@ -1,3 +1,4 @@
+require('babelify/polyfill')
 const _ = require('lodash')
 const plan = require('./plan')
 const helpers = require('./helpers')
